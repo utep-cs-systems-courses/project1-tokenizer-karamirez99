@@ -73,16 +73,53 @@ static char *test_count_words() {
     return 0;
 }
 
-//static char *test_tokenize() {
-//    char *str = "happy happy joy joy";
-//    char **tokens = tokenize(str);
-//    mu_assert("tokens[0] == 'happy'", strcmp(tokens[0], "happy") == 0);
-//    mu_assert("tokens[1] == 'happy'", strcmp(tokens[1], "happy") == 0);
-//    mu_assert("tokens[2] == 'joy'", strcmp(tokens[2], "joy") == 0);
-//    mu_assert("tokens[3] == 'joy'", strcmp(tokens[3], "joy") == 0);
-//    free_tokens(tokens);
-//    return 0;
-//}
+static int equal_str(char *str, char *str2){
+  int i = 0;
+  
+  while(str[i] == str2[i] && (str[i] != '\0' || str2[i]) != '\0'){
+    i += 1;
+  }
+
+  return (str[i] == str2[i] && &str != &str2) ? 1 : 0;
+}
+
+static char *test_copy_str() {
+  char *str = "happy joy";
+  char *copystr = copy_str(str, 9);
+  
+  mu_assert("happy joy == copy_str('happy joy')", equal_str(str, copystr));
+
+  str = "hapy joy";
+  mu_assert("hapoy joy != copy_str('happy joy')", !equal_str(str, copystr));
+  
+  return 0;
+}
+
+static char *test_tokenize() {
+  char *str = "happy happy joy joy";
+  char **tokens = tokenize(str);
+  
+  mu_assert("tokens[0] == 'happy'", strcmp(tokens[0], "happy") == 0);
+  mu_assert("tokens[1] == 'happy'", strcmp(tokens[1], "happy") == 0);
+  mu_assert("tokens[2] == 'joy'", strcmp(tokens[2], "joy") == 0);
+  mu_assert("tokens[3] == 'joy'", strcmp(tokens[3], "joy") == 0);
+  free_tokens(tokens);
+
+  str = " Expect this on a new line";
+  tokens = tokenize(str);
+  mu_assert("tokens[0] == 'Expect'", strcmp(tokens[0], "Expect") == 0);
+  mu_assert("tokens[1] == 'this'", strcmp(tokens[1], "this") == 0);
+  mu_assert("tokens[2] == 'on'", strcmp(tokens[2], "on") == 0);
+  mu_assert("tokens[3] == 'a'", strcmp(tokens[3], "a") == 0);
+  return 0;
+}
+
+static char *test_print_tokens() {
+  char *str= " Expect this on a new line";
+  char **tokens = tokenize(str);
+  print_tokens(tokens);
+  return 0;
+}
 
 /* History test cases */
 //static char *test_add_history() {
@@ -106,13 +143,14 @@ static char *all_tests() {
     if (TEST_TOKENIZER) {
       //mu_run_test(test_string_length);
         //mu_run_test(test_is_valid_character);
-      // mu_run_test(test_find_word_start);
       mu_run_test(test_find_word_start);
       mu_run_test(test_space_char);
       mu_run_test(test_non_space_char);		  
       mu_run_test(test_find_word_terminator);
       mu_run_test(test_count_words);
-      //mu_run_test(test_tokenize);
+      mu_run_test(test_copy_str);
+      mu_run_test(test_tokenize);
+      // mu_run_test(test_print_tokens);
     }
 
     if (TEST_HISTORY) {
