@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "tokenizer.h"
-//#include "history.h"
+#include "history.h"
 
 /*
     The following is a simple testing script with a single example of input
@@ -10,7 +10,7 @@
 */
 
 #define TEST_TOKENIZER 1
-#define TEST_HISTORY 0
+#define TEST_HISTORY 1
 
 /* MinUnit: http://www.jera.com/techinfo/jtns/jtn002.html */
  #define mu_assert(message, test) do { if (!(test)) return message; } while (0)
@@ -117,32 +117,49 @@ static char *test_tokenize() {
 static char *test_print_tokens() {
   char *str= " Expect this on a new line";
   char **tokens = tokenize(str);
+  printf("Testing print tokens\n");
   print_tokens(tokens);
+  printf("\n");
   return 0;
 }
 
 /* History test cases */
-//static char *test_add_history() {
-//    List* list = init_history();
-//    add_history(list, "happy");
-//    mu_assert("add_history(list, 'happy')", strcmp(list->root->str, "happy") == 0);
-//    add_history(list, "joy");
-//    mu_assert("add_history(list, 'joy')", strcmp(list->root->next->str, "joy") == 0);
-//    return 0;
-//}
+static char *test_add_history() {
+    List* list = init_history();
+    add_history(list, "happy");
+    mu_assert("add_history(list, 'happy')", strcmp(list->root->str, "happy") == 0);
+    add_history(list, "joy");
+    mu_assert("add_history(list, 'joy')", strcmp(list->root->next->str, "joy") == 0);
+    add_history(list, "happy");
+    mu_assert("add_history(list, 'happy')", strcmp(list->root->next->next->str, "happy") == 0);
+    return 0;
+}
 
-//static char *test_get_history() {
-//    List* list = init_history();
-//    add_history(list, "happy");
-//    mu_assert("get_history(list, 1)", strcmp(get_history(list, 1), "happy") == 0);
-//    return 0;
-//}
+static char *test_get_history() {
+    List* list = init_history();
+    add_history(list, "happy");
+    mu_assert("get_history(list, 1)", strcmp(get_history(list, 1), "happy") == 0);
 
+    mu_assert("get_history(list, 2) size1", get_history(list, 2) == NULL);
+    return 0;
+}
+
+static char *test_print_history() {
+  List* list = init_history();
+  add_history(list, "happy");
+  add_history(list, "birthday");
+  add_history(list, "tou");
+
+  printf("Testing print history\n");
+  print_history(list);
+  printf("\n");
+  return 0;
+}
 
 static char *all_tests() {
     if (TEST_TOKENIZER) {
       //mu_run_test(test_string_length);
-        //mu_run_test(test_is_valid_character);
+      //mu_run_test(test_is_valid_character);
       mu_run_test(test_find_word_start);
       mu_run_test(test_space_char);
       mu_run_test(test_non_space_char);		  
@@ -150,12 +167,13 @@ static char *all_tests() {
       mu_run_test(test_count_words);
       mu_run_test(test_copy_str);
       mu_run_test(test_tokenize);
-      // mu_run_test(test_print_tokens);
+      mu_run_test(test_print_tokens);
     }
 
     if (TEST_HISTORY) {
-      //       mu_run_test(test_add_history);
-      //  mu_run_test(test_get_history);
+      mu_run_test(test_add_history);
+      mu_run_test(test_get_history);
+      mu_run_test(test_print_history);
     }
 
     return 0;
