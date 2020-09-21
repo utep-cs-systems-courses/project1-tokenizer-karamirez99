@@ -56,8 +56,7 @@ char *copy_str(char *inStr, short len)
 
   while((i < len) && (newStr[i++] = inStr[i]) != '\0'){}
 
-  newStr[i] = '\0';
-     
+  newStr[i] = '\0';     
   return newStr;
 }
 

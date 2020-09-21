@@ -35,7 +35,7 @@ void add_history(List *list, char *str)
   currItem->next = newItem;
 }
 
-char *get_history(List *list, int id)
+char* get_history(List *list, int id)
 {
   Item *currItem;
   int currId;
@@ -43,11 +43,12 @@ char *get_history(List *list, int id)
   if(list->root == NULL)
     return NULL;
 
+  
   currItem = list->root;
-  for(currId = 1; currId < id, currItem->next != NULL; currId++){
+  for(currId = 1; currId < id && currItem->next != NULL; currId++){
     currItem = currItem->next;
   }
-
+  
   return (currId == id) ? currItem->str : NULL;
 }
 
