@@ -13,4 +13,4 @@ test:
 	cc -o Test tester.c tokenizer.c history.c
 
 clean:
-	rm -f *.o lab1
+	rm -f *.o lab1 Test
