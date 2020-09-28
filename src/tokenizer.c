@@ -17,10 +17,10 @@ char *word_start(char *s)
   char c;
   int i = 0;
   
-  while ((c = s[i++]) != '\0' && space_char(c)) {}
+  while ((c = s[i++]) != '\0' && space_char(c)){}
   
   i -= 1;
-  return (s[i] != '\0') ? (s + i) : NULL;
+  return (s[i] != '\0') ? (s + i) : NULL;             //NULL if all chars were white space
 }
 
 char *word_terminator(char *s)
@@ -72,6 +72,7 @@ char **tokenize(char* str)
     cCount = 0;
     wordEnd = word_terminator(word);
 
+    /*Need to count number of chars for copy_str*/
     while((word + cCount++) != wordEnd){}
     
     tokens[i++] = copy_str(word, cCount - 1);

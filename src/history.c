@@ -17,7 +17,7 @@ void add_history(List *list, char *str)
     Item *newItem = malloc(sizeof(Item));
     newItem->id = 1;
     newItem->str = str;
-    list->root = newItem;
+    list->root = newItem;    //The first Node added is the root
     return;
   }
 
@@ -43,7 +43,6 @@ char* get_history(List *list, int id)
   if(list->root == NULL)
     return NULL;
 
-  
   currItem = list->root;
   for(currId = 1; currId < id && currItem->next != NULL; currId++){
     currItem = currItem->next;

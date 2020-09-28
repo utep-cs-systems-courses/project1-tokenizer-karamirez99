@@ -9,7 +9,6 @@
 int evaluateInput(char *line);
 void intro();
 int isDigit(char c);
-int parseNumber(char *line);
 char* copyLine(char *line);
 void printItemHelper(char *line, List *list);
 
@@ -48,7 +47,6 @@ int main()
 
     printf("\n");
   }
-  return 0;
 }
 
 int evaluateInput(char *line)
@@ -56,44 +54,36 @@ int evaluateInput(char *line)
   char* history = "!history";
   char* exit = "!exit";
   int i = 0, numDigits;
-  
+
   if(line[0] == '\n')
     return -1;
 
+  /*Checking if given text is keyword*/
   if(line[0] != '!')
     return 0;
 
+  /*Checking for history keyword)*/
   while(line[i] == history[i] && history[i++] != '\0') {}
   if(history[i] == '\0' && line[i] == '\n')
     return 1;
 
-  i = 1;
-  numDigits = 0;
-  while(isDigit(line[i++]) && numDigits++ < 2){}
-  if(1 <= numDigits && numDigits <= 2)
+  /*Checking for get history */
+  if(isDigit(line[1]))
     return 2;
-  
+
+  /*Checking for exit keyword)*/
   i = 0;
   while(line[i] == exit[i] && exit[i++] != '\0'){}
   if(exit[i] == '\0' && line[i] == '\n')
     return 3;
 
+  printf("\nUnrecognized Command\n");
   return -1;
 }
 
 int isDigit(char c)
 {
   return ('0' <= c && c <= '9') ? 1 : 0;   
-}
-
-int parseNumber(char *line)
-{
-  int num;
-
-  if(line[2] == '\n')
-    return line[1] - '0';
-  else
-    return 10 * (line[1] - '0') + (line[2] - '0');
 }
 
 char *copyLine(char *line)
@@ -108,7 +98,7 @@ char *copyLine(char *line)
 
 void printItemHelper(char *line, List *history)
 {
-  int num = parseNumber(line);
+  int num = atoi(line+1);
   char **tokens, *item = get_history(history, num);
 
   if(item != NULL){
